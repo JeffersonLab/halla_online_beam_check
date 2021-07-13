@@ -1,5 +1,5 @@
 // May 21, 2021: use version of code compiled with analyzer 1.7 based on ROOT 6.22
-R__LOAD_LIBRARY(/adaqfs/home/a-onl/dflay/FadcRasteredBeam/install/lib64/libtfrb.so)
+R__LOAD_LIBRARY(/adaqfs/home/a-onl/halla_online_beam_check/customLibrary/FadcRasteredBeam/install/lib64/libfrb.so)
 
 #include <cstdlib>
 #include <iostream>
@@ -106,7 +106,7 @@ Int_t get_rastersize_L(TString codafname,TString runNo, Int_t firsteve, Int_t la
    THaApparatus* decL = new THaDecData("DL","Misc. Decoder Data");
    gHaApps->Add( decL );
   
-  THaApparatus* Lrb = new TriFadcRasteredBeam("Lrb","Raster Beamline for FADC ");
+  THaApparatus* Lrb = new FadcRasteredBeam("Lrb","Raster Beamline for FADC ");
  // gHaApps->Add( FbusLrb );
   gHaApps->Add(Lrb);
 

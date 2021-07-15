@@ -28,8 +28,6 @@ Int_t get_rastersize_L(TString codafname,TString runNo, Int_t firsteve, Int_t la
    std::string odef_path = "./def/output_rastersize.def"; 
    std::string cdef_path = "./def/cuts_rastersize.def"; 
 
-  // 
-  //
   //  Steering script to extract the BPM information out of 
   //  the first few events from a rawdata file
   //  replacement for raster++
@@ -37,9 +35,7 @@ Int_t get_rastersize_L(TString codafname,TString runNo, Int_t firsteve, Int_t la
   // original by Bodo Reitz, June 2004
   // modified and maintained by Bob Michaels, 2006
   // 
-  // 
   // modified for Root 6 and FADC beam line by Tong Su,2017
-  // 
   
   gStyle->SetPalette(1);
   gStyle->SetNdivisions(605);
@@ -71,10 +67,6 @@ Int_t get_rastersize_L(TString codafname,TString runNo, Int_t firsteve, Int_t la
   ft->SetTextAlign(12);
   ft->DrawLatex(0.01,0.335,ca_title->Data());
 
-
-
-
-
   // Set up the event layout for the output file
   
   THaEvent* event = new THaEvent;
@@ -88,26 +80,24 @@ Int_t get_rastersize_L(TString codafname,TString runNo, Int_t firsteve, Int_t la
     analyzer = new THaAnalyzer;
   }
 
-  cout << "Loading spot's private libBeam ..."<<endl;
-
- // THaApparatus* BEAM1 = new THaUnRasteredBeam("Lurb","Unraster Beamline");
-//  THaApparatus* FbusLrb = new THaRasteredBeam("FbusLrb","Raster Beamline"); 
+  cout << "Loading spotFile's private libBeam ..."<<endl;
+  // THaApparatus* BEAM1 = new THaUnRasteredBeam("Lurb","Unraster Beamline");
+  // THaApparatus* FbusLrb = new THaRasteredBeam("FbusLrb","Raster Beamline"); 
   
   THaHRS* HRSL = new THaHRS("L","Left arm HRS");
   //HRSL->AddDetector( new THaVDC("vdc", "Vertical Drift Chamber" ));
   HRSL->AutoStandardDetectors(kFALSE);
   gHaApps->Add( HRSL );
 
+  // FbusLrb->AddDetector( new THaRaster("Raster2","Downstream raster") );
+  // FbusLrb->AddDetector( new THaBPM("BPMA","bpmA for raster beam"));
+  // FbusLrb->AddDetector( new THaBPM("BPMB","bpmB for raster beam"));
 
-  //FbusLrb->AddDetector( new THaRaster("Raster2","Downstream raster") );
- // FbusLrb->AddDetector( new THaBPM("BPMA","bpmA for raster beam"));
- // FbusLrb->AddDetector( new THaBPM("BPMB","bpmB for raster beam"));
-  
-   THaApparatus* decL = new THaDecData("DL","Misc. Decoder Data");
-   gHaApps->Add( decL );
-  
+  THaApparatus* decL = new THaDecData("DL","Misc. Decoder Data");
+  gHaApps->Add( decL );
+
   THaApparatus* Lrb = new FadcRasteredBeam("Lrb","Raster Beamline for FADC ");
- // gHaApps->Add( FbusLrb );
+  // gHaApps->Add( FbusLrb );
   gHaApps->Add(Lrb);
 
   analyzer->SetEvent( event );
@@ -136,155 +126,149 @@ Int_t get_rastersize_L(TString codafname,TString runNo, Int_t firsteve, Int_t la
   gStyle->SetLabelSize(0.06,"y");
   gROOT->ForceStyle();
 
+ TFile *spotFile = TFile::Open("rastersize.root");
+ if ( spotFile->IsOpen() ) printf("File opened successfully\n");
 
- TFile *TritiumSpot = TFile::Open("rastersize.root");
-if ( TritiumSpot->IsOpen() ) printf("File opened successfully\n");
-
-//  TH1F *bpma_x; TritiumSpot->GetObject("bpma_x", bpma_x);
-//  TH1F *bpma_y; TritiumSpot->GetObject("bpma_y", bpma_y);
-//  TH1F *bpmb_x; TritiumSpot->GetObject("bpmb_x", bpmb_x);
-//  TH1F *bpmb_y; TritiumSpot->GetObject("bpmb_y", bpmb_y);
-//  TH2F *bpma_xy; TritiumSpot->GetObject("bpma_xy", bpma_xy);
-//  TH2F *bpmb_xy; TritiumSpot->GetObject("bpmb_xy", bpmb_xy);
-//  TH2F *beam_xy; TritiumSpot->GetObject("beam_xy", beam_xy);
-//  TH2F *rastxy1; TritiumSpot->GetObject("rastxy1", rastxy1);
-//  TH2F *rastxy2; TritiumSpot->GetObject("rastxy2", rastxy2);
-//  TH2F *rastx1x2; TritiumSpot->GetObject("rastx1x2", rastx1x2);
-//  TH2F *rasty1y2; TritiumSpot->GetObject("rasty1y2", rasty1y2);
-//  TH2F *rastx1y2; TritiumSpot->GetObject("rastx1y2", rastx1y2);
-//  TH2F *rastx2y1; TritiumSpot->GetObject("rastx2y1", rastx2y1);
+//  TH1F *bpma_x; spotFile->GetObject("bpma_x", bpma_x);
+//  TH1F *bpma_y; spotFile->GetObject("bpma_y", bpma_y);
+//  TH1F *bpmb_x; spotFile->GetObject("bpmb_x", bpmb_x);
+//  TH1F *bpmb_y; spotFile->GetObject("bpmb_y", bpmb_y);
+//  TH2F *bpma_xy; spotFile->GetObject("bpma_xy", bpma_xy);
+//  TH2F *bpmb_xy; spotFile->GetObject("bpmb_xy", bpmb_xy);
+//  TH2F *beam_xy; spotFile->GetObject("beam_xy", beam_xy);
+//  TH2F *rastxy1; spotFile->GetObject("rastxy1", rastxy1);
+//  TH2F *rastxy2; spotFile->GetObject("rastxy2", rastxy2);
+//  TH2F *rastx1x2; spotFile->GetObject("rastx1x2", rastx1x2);
+//  TH2F *rasty1y2; spotFile->GetObject("rasty1y2", rasty1y2);
+//  TH2F *rastx1y2; spotFile->GetObject("rastx1y2", rastx1y2);
+//  TH2F *rastx2y1; spotFile->GetObject("rastx2y1", rastx2y1);
   
-//  TH1F *beam_x; TritiumSpot->GetObject("beam_x", beam_x);
-//  TH1F *beam_y; TritiumSpot->GetObject("beam_y", beam_y);
+//  TH1F *beam_x; spotFile->GetObject("beam_x", beam_x);
+//  TH1F *beam_y; spotFile->GetObject("beam_y", beam_y);
 
+// TH1F *bpmaraw1; spotFile->GetObject("bpmaraw1", bpmaraw1);
+// TH1F *bpmaraw2; spotFile->GetObject("bpmaraw2", bpmaraw2);
+// TH1F *bpmaraw3; spotFile->GetObject("bpmaraw3", bpmaraw3);
+// TH1F *bpmaraw4; spotFile->GetObject("bpmaraw4", bpmaraw4);
+// TH1F *bpmbraw1; spotFile->GetObject("bpmbraw1", bpmbraw1);
+// TH1F *bpmbraw2; spotFile->GetObject("bpmbraw2", bpmbraw2);
+// TH1F *bpmbraw3; spotFile->GetObject("bpmbraw3", bpmbraw3);
+// TH1F *bpmbraw4; spotFile->GetObject("bpmbraw4", bpmbraw4);
+// TH1F *bpmaraws; spotFile->GetObject("bpmaraws", bpmaraws);
+// TH1F *bpmbraws; spotFile->GetObject("bpmbraws", bpmbraws);
 
+// TH1F *URastX; spotFile->GetObject("URastX", URastX);
+// TH1F *URastY; spotFile->GetObject("URastY", URastY);
+// TH1F *DRastX; spotFile->GetObject("DRastX", DRastX);
+// TH1F *DRastY; spotFile->GetObject("DRastY", DRastY);
 
-// TH1F *bpmaraw1; TritiumSpot->GetObject("bpmaraw1", bpmaraw1);
-// TH1F *bpmaraw2; TritiumSpot->GetObject("bpmaraw2", bpmaraw2);
-// TH1F *bpmaraw3; TritiumSpot->GetObject("bpmaraw3", bpmaraw3);
-// TH1F *bpmaraw4; TritiumSpot->GetObject("bpmaraw4", bpmaraw4);
-// TH1F *bpmbraw1; TritiumSpot->GetObject("bpmbraw1", bpmbraw1);
-// TH1F *bpmbraw2; TritiumSpot->GetObject("bpmbraw2", bpmbraw2);
-// TH1F *bpmbraw3; TritiumSpot->GetObject("bpmbraw3", bpmbraw3);
-// TH1F *bpmbraw4; TritiumSpot->GetObject("bpmbraw4", bpmbraw4);
-// TH1F *bpmaraws; TritiumSpot->GetObject("bpmaraws", bpmaraws);
-// TH1F *bpmbraws; TritiumSpot->GetObject("bpmbraws", bpmbraws);
+// TH2F *urastraw_bpma_x; spotFile->GetObject("urastraw_bpma_x", urastraw_bpma_x);
+// TH2F *urastraw_bpma_y; spotFile->GetObject("urastraw_bpma_y", urastraw_bpma_y);
+// TH2F *urastraw_bpmb_x; spotFile->GetObject("urastraw_bpmb_x", urastraw_bpmb_x);
+// TH2F *urastraw_bpmb_y; spotFile->GetObject("urastraw_bpmb_y", urastraw_bpmb_y);
 
-// TH1F *URastX; TritiumSpot->GetObject("URastX", URastX);
-// TH1F *URastY; TritiumSpot->GetObject("URastY", URastY);
-// TH1F *DRastX; TritiumSpot->GetObject("DRastX", DRastX);
-// TH1F *DRastY; TritiumSpot->GetObject("DRastY", DRastY);
+// TH2F *urastraw_y_bpma_x; spotFile->GetObject("urastraw_y_bpma_x", urastraw_y_bpma_x);
+// TH2F *urastraw_x_bpma_y; spotFile->GetObject("urastraw_x_bpma_y", urastraw_x_bpma_y);
+// TH2F *urastraw_y_bpmb_x; spotFile->GetObject("urastraw_y_bpmb_x", urastraw_y_bpmb_x);
+// TH2F *urastraw_x_bpmb_y; spotFile->GetObject("urastraw_x_bpmb_y", urastraw_x_bpmb_y);
 
-// TH2F *urastraw_bpma_x; TritiumSpot->GetObject("urastraw_bpma_x", urastraw_bpma_x);
-// TH2F *urastraw_bpma_y; TritiumSpot->GetObject("urastraw_bpma_y", urastraw_bpma_y);
-// TH2F *urastraw_bpmb_x; TritiumSpot->GetObject("urastraw_bpmb_x", urastraw_bpmb_x);
-// TH2F *urastraw_bpmb_y; TritiumSpot->GetObject("urastraw_bpmb_y", urastraw_bpmb_y);
+// TH2F *drastraw_bpma_x; spotFile->GetObject("drastraw_bpma_x", drastraw_bpma_x);
+// TH2F *drastraw_bpma_y; spotFile->GetObject("drastraw_bpma_y", drastraw_bpma_y);
+// TH2F *drastraw_bpmb_x; spotFile->GetObject("drastraw_bpmb_x", drastraw_bpmb_x);
+// TH2F *drastraw_bpmb_y; spotFile->GetObject("drastraw_bpmb_y", drastraw_bpmb_y);
 
-// TH2F *urastraw_y_bpma_x; TritiumSpot->GetObject("urastraw_y_bpma_x", urastraw_y_bpma_x);
-// TH2F *urastraw_x_bpma_y; TritiumSpot->GetObject("urastraw_x_bpma_y", urastraw_x_bpma_y);
-// TH2F *urastraw_y_bpmb_x; TritiumSpot->GetObject("urastraw_y_bpmb_x", urastraw_y_bpmb_x);
-// TH2F *urastraw_x_bpmb_y; TritiumSpot->GetObject("urastraw_x_bpmb_y", urastraw_x_bpmb_y);
-
-// TH2F *drastraw_bpma_x; TritiumSpot->GetObject("drastraw_bpma_x", drastraw_bpma_x);
-// TH2F *drastraw_bpma_y; TritiumSpot->GetObject("drastraw_bpma_y", drastraw_bpma_y);
-// TH2F *drastraw_bpmb_x; TritiumSpot->GetObject("drastraw_bpmb_x", drastraw_bpmb_x);
-// TH2F *drastraw_bpmb_y; TritiumSpot->GetObject("drastraw_bpmb_y", drastraw_bpmb_y);
-
-// TH2F *drastraw_y_bpma_x; TritiumSpot->GetObject("drastraw_y_bpma_x", drastraw_y_bpma_x);
-// TH2F *drastraw_x_bpma_y; TritiumSpot->GetObject("drastraw_x_bpma_y", drastraw_x_bpma_y);
-// TH2F *drastraw_y_bpmb_x; TritiumSpot->GetObject("drastraw_y_bpmb_x", drastraw_y_bpmb_x);
-// TH2F *drastraw_x_bpmb_y; TritiumSpot->GetObject("drastraw_x_bpmb_y", drastraw_x_bpmb_y);
+// TH2F *drastraw_y_bpma_x; spotFile->GetObject("drastraw_y_bpma_x", drastraw_y_bpma_x);
+// TH2F *drastraw_x_bpma_y; spotFile->GetObject("drastraw_x_bpma_y", drastraw_x_bpma_y);
+// TH2F *drastraw_y_bpmb_x; spotFile->GetObject("drastraw_y_bpmb_x", drastraw_y_bpmb_x);
+// TH2F *drastraw_x_bpmb_y; spotFile->GetObject("drastraw_x_bpmb_y", drastraw_x_bpmb_y);
 // BELOW IS FOR FADC FADC FADC --THREE TIMES FOR EVERYTHING IMPORTANT
 
- TH1F *fbpma_x; TritiumSpot->GetObject("fbpma_x", fbpma_x);
- TH1F *fbpma_y; TritiumSpot->GetObject("fbpma_y", fbpma_y);
- TH1F *fbpmb_x; TritiumSpot->GetObject("fbpmb_x", fbpmb_x);
- TH1F *fbpmb_y; TritiumSpot->GetObject("fbpmb_y", fbpmb_y);
- TH2F *fbpma_xy; TritiumSpot->GetObject("fbpma_xy", fbpma_xy);
- TH2F *fbpmb_xy; TritiumSpot->GetObject("fbpmb_xy", fbpmb_xy);
- TH2F *fbeam_xy; TritiumSpot->GetObject("fbeam_xy", fbeam_xy);
- TH2F *frastxy1; TritiumSpot->GetObject("frastxy1", frastxy1);
- TH2F *frastxy2; TritiumSpot->GetObject("frastxy2", frastxy2);
- TH2F *frastxy2_spatial; TritiumSpot->GetObject("frastxy2_spatial", frastxy2_spatial);
- TH2F *frastx1x2; TritiumSpot->GetObject("frastx1x2", frastx1x2);
- TH2F *frasty1y2; TritiumSpot->GetObject("frasty1y2", frasty1y2);
- TH2F *frastx1y2; TritiumSpot->GetObject("frastx1y2", frastx1y2);
- TH2F *frastx2y1; TritiumSpot->GetObject("frastx2y1", frastx2y1);
+ TH1F *fbpma_x; spotFile->GetObject("fbpma_x", fbpma_x);
+ TH1F *fbpma_y; spotFile->GetObject("fbpma_y", fbpma_y);
+ TH1F *fbpmb_x; spotFile->GetObject("fbpmb_x", fbpmb_x);
+ TH1F *fbpmb_y; spotFile->GetObject("fbpmb_y", fbpmb_y);
+ TH2F *fbpma_xy; spotFile->GetObject("fbpma_xy", fbpma_xy);
+ TH2F *fbpmb_xy; spotFile->GetObject("fbpmb_xy", fbpmb_xy);
+ TH2F *fbeam_xy; spotFile->GetObject("fbeam_xy", fbeam_xy);
+ TH2F *frastxy1; spotFile->GetObject("frastxy1", frastxy1);
+ TH2F *frastxy2; spotFile->GetObject("frastxy2", frastxy2);
+ TH2F *frastxy2_spatial; spotFile->GetObject("frastxy2_spatial", frastxy2_spatial);
+ TH2F *frastx1x2; spotFile->GetObject("frastx1x2", frastx1x2);
+ TH2F *frasty1y2; spotFile->GetObject("frasty1y2", frasty1y2);
+ TH2F *frastx1y2; spotFile->GetObject("frastx1y2", frastx1y2);
+ TH2F *frastx2y1; spotFile->GetObject("frastx2y1", frastx2y1);
   
- TH1F *fbeam_x; TritiumSpot->GetObject("fbeam_x", fbeam_x);
- TH1F *fbeam_y; TritiumSpot->GetObject("fbeam_y", fbeam_y);
+ TH1F *fbeam_x; spotFile->GetObject("fbeam_x", fbeam_x);
+ TH1F *fbeam_y; spotFile->GetObject("fbeam_y", fbeam_y);
 
-TH1F *fbpmaraw1; TritiumSpot->GetObject("fbpmaraw1", fbpmaraw1);
-TH1F *fbpmaraw2; TritiumSpot->GetObject("fbpmaraw2", fbpmaraw2);
-TH1F *fbpmaraw3; TritiumSpot->GetObject("fbpmaraw3", fbpmaraw3);
-TH1F *fbpmaraw4; TritiumSpot->GetObject("fbpmaraw4", fbpmaraw4);
-TH1F *fbpmbraw1; TritiumSpot->GetObject("fbpmbraw1", fbpmbraw1);
-TH1F *fbpmbraw2; TritiumSpot->GetObject("fbpmbraw2", fbpmbraw2);
-TH1F *fbpmbraw3; TritiumSpot->GetObject("fbpmbraw3", fbpmbraw3);
-TH1F *fbpmbraw4; TritiumSpot->GetObject("fbpmbraw4", fbpmbraw4);
-TH1F *fbpmaraws; TritiumSpot->GetObject("fbpmaraws", fbpmaraws);
-TH1F *fbpmbraws; TritiumSpot->GetObject("fbpmbraws", fbpmbraws);
+ TH1F *fbpmaraw1; spotFile->GetObject("fbpmaraw1", fbpmaraw1);
+ TH1F *fbpmaraw2; spotFile->GetObject("fbpmaraw2", fbpmaraw2);
+ TH1F *fbpmaraw3; spotFile->GetObject("fbpmaraw3", fbpmaraw3);
+ TH1F *fbpmaraw4; spotFile->GetObject("fbpmaraw4", fbpmaraw4);
+ TH1F *fbpmbraw1; spotFile->GetObject("fbpmbraw1", fbpmbraw1);
+ TH1F *fbpmbraw2; spotFile->GetObject("fbpmbraw2", fbpmbraw2);
+ TH1F *fbpmbraw3; spotFile->GetObject("fbpmbraw3", fbpmbraw3);
+ TH1F *fbpmbraw4; spotFile->GetObject("fbpmbraw4", fbpmbraw4);
+ TH1F *fbpmaraws; spotFile->GetObject("fbpmaraws", fbpmaraws);
+ TH1F *fbpmbraws; spotFile->GetObject("fbpmbraws", fbpmbraws);
 
-TH1F *fURastX; TritiumSpot->GetObject("fURastX", fURastX);
-TH1F *fURastY; TritiumSpot->GetObject("fURastY", fURastY);
-TH1F *fDRastX; TritiumSpot->GetObject("fDRastX", fDRastX);
-TH1F *fDRastY; TritiumSpot->GetObject("fDRastY", fDRastY);
-TH1F *fDRastX_spatial; TritiumSpot->GetObject("fDRastX_spatial", fDRastX_spatial);
-TH1F *fDRastY_spatial; TritiumSpot->GetObject("fDRastY_spatial", fDRastY_spatial);
+ TH1F *fURastX; spotFile->GetObject("fURastX", fURastX);
+ TH1F *fURastY; spotFile->GetObject("fURastY", fURastY);
+ TH1F *fDRastX; spotFile->GetObject("fDRastX", fDRastX);
+ TH1F *fDRastY; spotFile->GetObject("fDRastY", fDRastY);
+ TH1F *fDRastX_spatial; spotFile->GetObject("fDRastX_spatial", fDRastX_spatial);
+ TH1F *fDRastY_spatial; spotFile->GetObject("fDRastY_spatial", fDRastY_spatial);
 
-TH2F *furastraw_bpma_x; TritiumSpot->GetObject("furastraw_bpma_x", furastraw_bpma_x);
-TH2F *furastraw_bpma_y; TritiumSpot->GetObject("furastraw_bpma_y", furastraw_bpma_y);
-TH2F *furastraw_bpmb_x; TritiumSpot->GetObject("furastraw_bpmb_x", furastraw_bpmb_x);
-TH2F *furastraw_bpmb_y; TritiumSpot->GetObject("furastraw_bpmb_y", furastraw_bpmb_y);
+ TH2F *furastraw_bpma_x; spotFile->GetObject("furastraw_bpma_x", furastraw_bpma_x);
+ TH2F *furastraw_bpma_y; spotFile->GetObject("furastraw_bpma_y", furastraw_bpma_y);
+ TH2F *furastraw_bpmb_x; spotFile->GetObject("furastraw_bpmb_x", furastraw_bpmb_x);
+ TH2F *furastraw_bpmb_y; spotFile->GetObject("furastraw_bpmb_y", furastraw_bpmb_y);
 
-TH2F *furastraw_y_bpma_x; TritiumSpot->GetObject("furastraw_y_bpma_x", furastraw_y_bpma_x);
-TH2F *furastraw_x_bpma_y; TritiumSpot->GetObject("furastraw_x_bpma_y", furastraw_x_bpma_y);
-TH2F *furastraw_y_bpmb_x; TritiumSpot->GetObject("furastraw_y_bpmb_x", furastraw_y_bpmb_x);
-TH2F *furastraw_x_bpmb_y; TritiumSpot->GetObject("furastraw_x_bpmb_y", furastraw_x_bpmb_y);
+ TH2F *furastraw_y_bpma_x; spotFile->GetObject("furastraw_y_bpma_x", furastraw_y_bpma_x);
+ TH2F *furastraw_x_bpma_y; spotFile->GetObject("furastraw_x_bpma_y", furastraw_x_bpma_y);
+ TH2F *furastraw_y_bpmb_x; spotFile->GetObject("furastraw_y_bpmb_x", furastraw_y_bpmb_x);
+ TH2F *furastraw_x_bpmb_y; spotFile->GetObject("furastraw_x_bpmb_y", furastraw_x_bpmb_y);
 
-TH2F *fdrastraw_bpma_x; TritiumSpot->GetObject("fdrastraw_bpma_x", fdrastraw_bpma_x);
-TH2F *fdrastraw_bpma_y; TritiumSpot->GetObject("fdrastraw_bpma_y", fdrastraw_bpma_y);
-TH2F *fdrastraw_bpmb_x; TritiumSpot->GetObject("fdrastraw_bpmb_x", fdrastraw_bpmb_x);
-TH2F *fdrastraw_bpmb_y; TritiumSpot->GetObject("fdrastraw_bpmb_y", fdrastraw_bpmb_y);
+ TH2F *fdrastraw_bpma_x; spotFile->GetObject("fdrastraw_bpma_x", fdrastraw_bpma_x);
+ TH2F *fdrastraw_bpma_y; spotFile->GetObject("fdrastraw_bpma_y", fdrastraw_bpma_y);
+ TH2F *fdrastraw_bpmb_x; spotFile->GetObject("fdrastraw_bpmb_x", fdrastraw_bpmb_x);
+ TH2F *fdrastraw_bpmb_y; spotFile->GetObject("fdrastraw_bpmb_y", fdrastraw_bpmb_y);
 
-TH2F *fdrastraw_y_bpma_x; TritiumSpot->GetObject("fdrastraw_y_bpma_x", fdrastraw_y_bpma_x);
-TH2F *fdrastraw_x_bpma_y; TritiumSpot->GetObject("fdrastraw_x_bpma_y", fdrastraw_x_bpma_y);
-TH2F *fdrastraw_y_bpmb_x; TritiumSpot->GetObject("fdrastraw_y_bpmb_x", fdrastraw_y_bpmb_x);
-TH2F *fdrastraw_x_bpmb_y; TritiumSpot->GetObject("fdrastraw_x_bpmb_y", fdrastraw_x_bpmb_y);
+ TH2F *fdrastraw_y_bpma_x; spotFile->GetObject("fdrastraw_y_bpma_x", fdrastraw_y_bpma_x);
+ TH2F *fdrastraw_x_bpma_y; spotFile->GetObject("fdrastraw_x_bpma_y", fdrastraw_x_bpma_y);
+ TH2F *fdrastraw_y_bpmb_x; spotFile->GetObject("fdrastraw_y_bpmb_x", fdrastraw_y_bpmb_x);
+ TH2F *fdrastraw_x_bpmb_y; spotFile->GetObject("fdrastraw_x_bpmb_y", fdrastraw_x_bpmb_y);
 
+ //For projecting onto collimator and target
+ TH1F *col_x; spotFile->GetObject("col_x", col_x);
+ TH1F *col_y; spotFile->GetObject("col_y", col_y);
+ TH1F *targ_x; spotFile->GetObject("targ_x", targ_x);
+ TH1F *targ_y; spotFile->GetObject("targ_y", targ_y);
 
-//For projecting onto collimator and target
-TH1F *col_x; TritiumSpot->GetObject("col_x", col_x);
-TH1F *col_y; TritiumSpot->GetObject("col_y", col_y);
-TH1F *targ_x; TritiumSpot->GetObject("targ_x", targ_x);
-TH1F *targ_y; TritiumSpot->GetObject("targ_y", targ_y);
+ TH2F *col_xy; spotFile->GetObject("col_xy", col_xy);
+ TH2F *targ_xy; spotFile->GetObject("targ_xy", targ_xy);
 
-TH2F *col_xy; TritiumSpot->GetObject("col_xy", col_xy);
-TH2F *targ_xy; TritiumSpot->GetObject("targ_xy", targ_xy);
+ fbpma_x->GetXaxis()->SetLabelSize(0.075);
+ fbpma_x->GetYaxis()->SetLabelSize(0.075);
+ fbpma_y->GetXaxis()->SetLabelSize(0.075);
+ fbpma_y->GetYaxis()->SetLabelSize(0.075);
+ fbpma_xy->GetXaxis()->SetLabelSize(0.075);
+ fbpma_xy->GetYaxis()->SetLabelSize(0.075);
+ fbpmb_x->GetXaxis()->SetLabelSize(0.075);
+ fbpmb_x->GetYaxis()->SetLabelSize(0.075);
 
+ fbpmb_y->GetXaxis()->SetLabelSize(0.075);
+ fbpmb_y->GetYaxis()->SetLabelSize(0.075);
+ fbpmb_xy->GetXaxis()->SetLabelSize(0.075);
+ fbpmb_xy->GetYaxis()->SetLabelSize(0.075);
+ fbeam_x->GetXaxis()->SetLabelSize(0.075);
+ fbeam_x->GetYaxis()->SetLabelSize(0.075);
+ fbeam_y->GetXaxis()->SetLabelSize(0.075);
+ fbeam_y->GetYaxis()->SetLabelSize(0.075);
+ fbeam_xy->GetXaxis()->SetLabelSize(0.075);
+ fbeam_xy->GetYaxis()->SetLabelSize(0.075);
 
-  fbpma_x->GetXaxis()->SetLabelSize(0.075);
-  fbpma_x->GetYaxis()->SetLabelSize(0.075);
-  fbpma_y->GetXaxis()->SetLabelSize(0.075);
-  fbpma_y->GetYaxis()->SetLabelSize(0.075);
-  fbpma_xy->GetXaxis()->SetLabelSize(0.075);
-  fbpma_xy->GetYaxis()->SetLabelSize(0.075);
-  fbpmb_x->GetXaxis()->SetLabelSize(0.075);
-  fbpmb_x->GetYaxis()->SetLabelSize(0.075);
-
-  fbpmb_y->GetXaxis()->SetLabelSize(0.075);
-  fbpmb_y->GetYaxis()->SetLabelSize(0.075);
-  fbpmb_xy->GetXaxis()->SetLabelSize(0.075);
-  fbpmb_xy->GetYaxis()->SetLabelSize(0.075);
-  fbeam_x->GetXaxis()->SetLabelSize(0.075);
-  fbeam_x->GetYaxis()->SetLabelSize(0.075);
-  fbeam_y->GetXaxis()->SetLabelSize(0.075);
-  fbeam_y->GetYaxis()->SetLabelSize(0.075);
-  fbeam_xy->GetXaxis()->SetLabelSize(0.075);
-  fbeam_xy->GetYaxis()->SetLabelSize(0.075);
-
-
-//// BELOW IS FOR FADC FADC FADC --THREE TIMES FOR EVERYTHING IMPORTANT////
+  // BELOW IS FOR FADC FADC FADC --THREE TIMES FOR EVERYTHING IMPORTANT////
   fc1->cd(1);
   fbpma_xy->Draw("colz");
   gPad->SetGridx();  
@@ -304,7 +288,6 @@ TH2F *targ_xy; TritiumSpot->GetObject("targ_xy", targ_xy);
   fc1->cd(6);
   fbpmb_y->Draw();
 
-
   TCanvas* fc2 =  new TCanvas("fc2","FADC Upstream Raster Plots ",1200,600);
   fc2->Divide(3,1);
   fc2->cd(1);
@@ -321,10 +304,10 @@ TH2F *targ_xy; TritiumSpot->GetObject("targ_xy", targ_xy);
   gPad->SetGrid(1,1);
   gStyle->SetOptStat(1);
 
-//  fc2->cd(2);
-//  fURastX->Draw();
- // fc2->cd(3);
- // fURastY->Draw();
+  // fc2->cd(2);
+  // fURastX->Draw();
+  // fc2->cd(3);
+  // fURastY->Draw();
 
   TCanvas* fc2A =  new TCanvas("fc2A","FADC Downstream Raster Plots",1800,600);
   fc2A->Divide(3,1);
@@ -353,8 +336,6 @@ TH2F *targ_xy; TritiumSpot->GetObject("targ_xy", targ_xy);
   fDRastY->SetTitle("FADC Downstream Raster Y");
   fDRastY->GetXaxis()->SetLabelSize(.04);
   fDRastY->GetYaxis()->SetLabelSize(.04);
-
-
  
   TCanvas* fc2B =  new TCanvas("fc2B","fadc check",1800,1200);
   //  gStyle->SetOptStat(0);
@@ -478,16 +459,9 @@ TH2F *targ_xy; TritiumSpot->GetObject("targ_xy", targ_xy);
   fc6->cd(6);
   col_y->Draw();
 
-
-
-
-
-
-
   cout<<"++++++++++++++++++++++++++++++++"<<endl;
   cout<<"*****Beam Check For PREX *****"<<endl;
   cout<<"++++++++++++++++++++++++++++++++"<<endl;
-
 
   cout<<"CODA-file:   "<<codafname<<endl;
   cout<<"first event: "<<firsteve<<endl;
@@ -495,41 +469,36 @@ TH2F *targ_xy; TritiumSpot->GetObject("targ_xy", targ_xy);
   cout<<"++++++++++++++++++++++++++++++++"<<endl;
   cout<<""<<endl;
   cout<<"type .q when you are done"<<endl;
-  
 
-   TString name4=Form("FADC_%s_",exp.c_str());
-   name4.Append(runNo);
-   name4.Append(".pdf[");
+  TString name4=Form("FADC_%s_",exp.c_str());
+  name4.Append(runNo);
+  name4.Append(".pdf[");
 
-   TString name5=Form("FADC_%s_",exp.c_str());
-   name5.Append(runNo);
-   name5.Append(".pdf");
+  TString name5=Form("FADC_%s_",exp.c_str());
+  name5.Append(runNo);
+  name5.Append(".pdf");
 
-   TString name6=Form("FADC_%s_",exp.c_str());
-   name6.Append(runNo);
-   name6.Append(".pdf]");
+  TString name6=Form("FADC_%s_",exp.c_str());
+  name6.Append(runNo);
+  name6.Append(".pdf]");
 
+  //c5 countains c1
+  // c5->Print(name1);
+  // c5->Print(name2);
+  // c3->Print(name2);
+  // c2->Print(name2);
+  // c2A->Print(name2);
+  // c2B->Print(name2);
+  // c2B->Print(name3);
 
-   //c5 countains c1
-   // c5->Print(name1);
-   // c5->Print(name2);
-   // c3->Print(name2);
-   // c2->Print(name2);
-   // c2A->Print(name2);
-   // c2B->Print(name2);
-   // c2B->Print(name3);
-   
-  
+  fc5->SaveAs(name4);
+  fc5->SaveAs(name5);
+  fc3->SaveAs(name5);
+  fc2->SaveAs(name5);
+  fc2A->SaveAs(name5);
+  fc2B->SaveAs(name5);
+  fc6->SaveAs(name5);
+  fc2B->SaveAs(name6);
 
-   fc5->SaveAs(name4);
-   fc5->SaveAs(name5);
-   fc3->SaveAs(name5);
-   fc2->SaveAs(name5);
-   fc2A->SaveAs(name5);
-   fc2B->SaveAs(name5);
-   fc6->SaveAs(name5);
-   fc2B->SaveAs(name6);
   return 1;
-
-
 }

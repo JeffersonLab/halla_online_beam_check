@@ -15,4 +15,3 @@ raster data, see the directory `raster`.
 When writing a custom library that links to the Analyzer, put it in the 
 directory `customLibrary`.  For an example, see the `~/customLibrary/FadcRasteredBeam` module. 
 
-

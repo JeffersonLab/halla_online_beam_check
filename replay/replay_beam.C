@@ -50,6 +50,7 @@ int main(int argc,char *argv[]){
 //______________________________________________________________________________
 void replay_beam_test(const char *filebase,unsigned int nev){
 
+   // output and cut definition files 
    std::string odef_path = "./def/output_rastersize.def"; 
    std::string cdef_path = "./def/cuts_rastersize.def"; 
 
@@ -72,9 +73,13 @@ void replay_beam_test(const char *filebase,unsigned int nev){
   THaApparatus* decL = new THaDecData("DL","Misc. Decoder Data");
   gHaApps->Add( decL );
 
-  // add rastered beam
+  // add *rastered* beam
   THaApparatus* Lrb = new FadcRasteredBeam("Lrb","Raster Beamline for FADC");
   gHaApps->Add(Lrb);
+
+  // FIXME: add scalers (BCMs...). Need a db_LeftScalevt.dat file!  
+  // THaScalerEvtHandler *lScaler = new THaScalerEvtHandler("Left","HA scaler event type 140");
+  // gHaEvtHandlers->Add(lScaler);
 
   analyzer->SetEvent( event );
   analyzer->SetOutFile( rootfname );
